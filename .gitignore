@@ -1,0 +1,13 @@
+# Created by .ignore support plugin (hsz.mobi)
+/VideoCallingBackend/grailsw.bat
+/VideoCallingBackend/VideoCallingBackend.iml
+/VideoCallingBackend/wrapper/
+/VideoCallingBackend/.project
+/VideoCallingBackend/target/
+/VideoCallingBackend/VideoCallingBackend-grailsPlugins.iml
+/VideoCallingBackend/test/
+/VideoCallingBackend/.classpath
+/VideoCallingBackend/grailsw
+/VideoCallingBackend/.slcache/
+/VideoCallingBackend/.idea/
+/.idea/
