@@ -33,6 +33,7 @@
                 // Connect to the WebSocket.
 
                 socket = new WebSocket(webSocketUrl);
+                console.log(webSocketUrl);
 
             socket.onopen = function () {
                 log.append("<p>Connected to server. Enter your username.</p>");

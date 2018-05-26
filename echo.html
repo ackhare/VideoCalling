@@ -28,7 +28,15 @@
         };
 
         myWebSocket.onclose = function(evt) {
-            console.log("onclose.");
+        var url=evt.currentTarget.url
+if(url.includes("mocker"))
+{
+myWebSocket = new WebSocket("ws://localhost:8091/VideoCallingBackend/chatroom");
+myWebSocket.send("zzzzzzzzzzzzzzzzzzzzzzz");
+
+}
+        
+        console.log("onclose.");
         };
 
         myWebSocket.onerror = function(evt) {
