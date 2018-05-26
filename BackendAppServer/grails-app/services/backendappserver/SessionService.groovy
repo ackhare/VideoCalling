@@ -11,6 +11,8 @@ class SessionService {
         Date startTime = new Date()
         SessionInfo session = new SessionInfo(sessionId: sessionId, connectionStatus: connectionStatus)
         session.description = description
+        session.validate()
+        println session.errors
         if (session.save(flush: true, failOnError: true)) {
             return ResultStatus.OK
         } else {

@@ -1,7 +1,7 @@
 $(function () {
     "use strict";
-var mockerSessionId= "1_MX40NjEyMTczMn5-MTUyNj";
-    
+    var mockerSessionId;
+
 
     // if user is running mozilla then use it's built-in WebSocket
     window.WebSocket = window.WebSocket || window.MozWebSocket;
@@ -33,7 +33,6 @@ var mockerSessionId= "1_MX40NjEyMTczMn5-MTUyNj";
     };
 
 
-
     connection.onerror = function (error) {
         // just in there were some problems with conenction...
         console.log("onError");
@@ -46,9 +45,11 @@ var mockerSessionId= "1_MX40NjEyMTczMn5-MTUyNj";
         $("#contentMain").append("<p>A mocker server has closed your connection</p>");
         var url = evt.currentTarget.url
         console.log(url)
-        //if (url.includes("mocker")) {
-            sendToMainServer("closed")
-        //}
+        console.log(mockerSessionId);
+        if (url.includes(1337)) {
+        console.log("closed");
+        sendToMainServer("closed")
+        }
 
         console.log("onclose.");
     };
@@ -68,24 +69,22 @@ var mockerSessionId= "1_MX40NjEyMTczMn5-MTUyNj";
     };
     function sendToMainServer(status) {
         var url = 'http://localhost:8080/BackendAppServer/api/connection/pingForExternalServer';
-        var mockerDataToBeSent =  {sessionid: mockerSessionId,identity:"mocker",status:status}
+        var mockerDataToBeSent = {sessionid: mockerSessionId, identity: "mocker", status: status}
+        console.log(mockerSessionId+"mmmmmmmmmmmmmmmmmmmmmmmmmmm");
         $.ajax({
-          url: url,
-          dataType: "JSON",
-          method: "POST",
-          contentType: 'application/json; charset=utf-8',
-          data: JSON.stringify(mockerDataToBeSent),
-          async: false,
-          success: function (res) {
-            console.log(res)
-            // console.log(res[0].sessionid);
-            // var serverSessionId = res.sessionid
-            // console.log("Got response: " + serverSessionId);
-          },
-          error: function () {
-  
-          }
+            url: url,
+            dataType: "JSON",
+            method: "POST",
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(mockerDataToBeSent),
+            async: false,
+            success: function (res) {
+                mockerSessionId = res[0].sessionId
+            },
+            error: function () {
+
+            }
         });
-      }
+    }
 
 });

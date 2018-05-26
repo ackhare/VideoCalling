@@ -15,7 +15,7 @@ class VideoCallController extends RestfulController {
         String sessionId = UUID.randomUUID().toString().replaceAll("-", "")
         String status = null
         if (sessionId) {
-            status = sessionService.saveSessionInfo(sessionId,"grails server connectes to frontend",ConnectionStatus.OPEN)
+            status = sessionService.saveSessionInfo(sessionId, "grails server connectes to frontend", ConnectionStatus.OPEN)
         } else {
             status = ResultStatus.FAILED
         }
@@ -55,17 +55,19 @@ class VideoCallController extends RestfulController {
 
     def pingForExternalServer() {
         def requestJSON = request.getJSON()
-        String sessionId = requestJSON["sessionid"]
         String identity = requestJSON["identity"]
-        String status =requestJSON["status"]
+        String status = requestJSON["status"]
         println requestJSON
-        if(status=="open")
-        sessionService.saveSessionInfo(sessionId,identity,ConnectionStatus.OPEN)
-        else if(status=="closed")
-        {
+        String sessionId = null
+        if (status == "open") {
+            sessionId = UUID.randomUUID().toString().replaceAll("-", "")
+            sessionService.saveSessionInfo(sessionId, identity, ConnectionStatus.OPEN)
+        } else if (status == "closed") {
+            sessionId = requestJSON['sessionid']
             sessionService.updateSessionInfo(sessionId)
         }
-        println request.getJSON()
-        render "mmm"
+        def result = []
+        result.add("sessionId": sessionId)
+        render result as JSON
     }
 }
