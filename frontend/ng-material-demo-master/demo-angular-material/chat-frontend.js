@@ -1,4 +1,5 @@
 $(function () {
+
     "use strict";
     var mockerSessionId;
 
@@ -65,26 +66,40 @@ $(function () {
             leng = event.data.size
         }
         console.log("onmessage. size: " + leng + ", content: " + event.data);
-        $("#contentMain").append("<p>A mocker server has accepted your message</p>");
+        $("#contentMain").append("<p>A mocker server has accepted your message : "+message+"</p>");
     };
     function sendToMainServer(status) {
         var url = 'http://localhost:8080/BackendAppServer/api/connection/pingForExternalServer';
         var mockerDataToBeSent = {sessionid: mockerSessionId, identity: "mocker", status: status}
         console.log(mockerSessionId+"mmmmmmmmmmmmmmmmmmmmmmmmmmm");
-        $.ajax({
-            url: url,
-            dataType: "JSON",
-            method: "POST",
-            contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(mockerDataToBeSent),
-            async: false,
-            success: function (res) {
-                mockerSessionId = res[0].sessionId
-            },
-            error: function () {
-
-            }
-        });
+        // $.ajax({
+        //     url: url,
+        //     dataType: "JSON",
+        //     method: "POST",
+        //     contentType: 'application/json; charset=utf-8',
+        //     data: JSON.stringify(mockerDataToBeSent),
+        //     async: false,
+        //     success: function (res) {
+        //         mockerSessionId = res[0].sessionId
+        //     },
+        //     error: function () {
+        //
+        //     }
+        // });
+        // app.controller('myCtrl', function($scope, $http) {
+        //     $http({
+        //     url: url,
+        //     dataType: "JSON",
+        //     method: "POST",
+        //     contentType: 'application/json; charset=utf-8',
+        //     data: JSON.stringify(mockerDataToBeSent),
+        //     async: false,
+        //     }).then(function mySuccess(response) {
+        //        mockerSessionId = res[0].sessionId
+        //     }, function myError(response) {
+        //         console.error("There was an error communicating with grails server");
+        //     });
+        // });
     }
 
 });

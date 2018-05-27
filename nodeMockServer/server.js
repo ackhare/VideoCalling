@@ -24,13 +24,13 @@ wsServer.on('request', function (request) {
     // This is the most important callback for us, we'll handle
     // all messages from users here.
     connection.on('message', function (message) {
-        if (message.type === 'utf8') {
+   
             // process WebSocket message
             console.log((new Date()) + ' Received Message from '
-                + ': ' + message.utf8Data);
+                + ': ' + message);
             connection.sendUTF("The mocker recieved your message");
             // console.log((new Date()) +);
-        }
+       
     });
 
     connection.on('close', function (connection) {
