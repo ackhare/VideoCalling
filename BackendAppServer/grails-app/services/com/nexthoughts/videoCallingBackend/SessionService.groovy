@@ -36,20 +36,26 @@ class SessionService {
         }
     }
 
-    public String updateSessionInfo(String sessionId) {
+    public String updateSessionInfo(String sessionId, String identity, ConnectionStatus connectionStatus) {
         SessionInfo session = SessionInfo.findBySessionId(sessionId)
         String result = null
-        String currentSession = session.getConnectionStatus()
-        if ((currentSession == ConnectionStatus.OPEN.toString()) || (currentSession == ConnectionStatus.ACTIVE.toString())) {
-            session.connectionStatus = ConnectionStatus.ACTIVE
-            session.updatedTime = new Date()
-            if (session.save(flush: true, failOnError: true)) {
-                result = ResultStatus.OK
+        if (session) {
+            session.description = identity
+            session.connectionStatus = connectionStatus
+
+            String currentSession = session.getConnectionStatus()
+            if ((currentSession == ConnectionStatus.OPEN.toString()) || (currentSession == ConnectionStatus.ACTIVE.toString())) {
+                session.connectionStatus = ConnectionStatus.ACTIVE
+                session.updatedTime = new Date()
+                if (session.save(flush: true, failOnError: true)) {
+                    result = ResultStatus.OK
+                } else {
+                    result = ResultStatus.FAILED
+                }
             } else {
                 result = ResultStatus.FAILED
             }
-        } else {
-            result = ResultStatus.FAILED
+
         }
         return result
     }

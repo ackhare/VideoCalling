@@ -8,12 +8,12 @@ import grails.rest.RestfulController
 class VideoCallController extends RestfulController {
 
     def sessionService
-    private static final String BACKEND_SERVER="backend server"
+    private static final String BACKEND_SERVER = "backend server"
 
     static responseFormats = ['json', 'xml']
 
     def connect() {
-        String sessionId = UUID.randomUUID().toString().replaceAll("-", "")
+        String sessionId = AppUtil.generateRandomId()
         String status = null
         if (sessionId) {
             status = sessionService.saveSessionInfo(sessionId, BACKEND_SERVER, ConnectionStatus.OPEN)
@@ -44,7 +44,7 @@ class VideoCallController extends RestfulController {
         String sessionId = requestJSON["sessionid"]
         String status = null
         if (sessionId) {
-            status = sessionService.updateSessionInfo(sessionId)
+            status = sessionService.updateSessionInfo(sessionId,BACKEND_SERVER,null)
         } else {
             status = ResultStatus.FAILED
         }
@@ -57,13 +57,12 @@ class VideoCallController extends RestfulController {
         def requestJSON = request.getJSON()
         String identity = requestJSON["identity"]
         String status = requestJSON["status"]
-        String sessionId = null
+        String sessionId =requestJSON['sessionid']
+        println requestJSON
         if (status == ConnectionStatus.OPEN.status.toLowerCase()) {
-            sessionId=AppUtil.generateRandomId()
-            sessionService.saveSessionInfo(sessionId, identity, ConnectionStatus.OPEN)
+            sessionService.updateSessionInfo(sessionId, identity, ConnectionStatus.OPEN)
         } else if (status == ConnectionStatus.CLOSED.status.toLowerCase()) {
-            sessionId=requestJSON['sessionid']
-            sessionService.updateSessionInfo(sessionId)
+            sessionService.updateSessionInfo(sessionId, identity, ConnectionStatus.CLOSED)
         }
         def result = []
         result.add("sessionId": sessionId)

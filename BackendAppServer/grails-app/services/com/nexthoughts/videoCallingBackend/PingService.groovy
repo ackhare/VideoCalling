@@ -13,7 +13,10 @@ class PingService {
         sessionInfoList.each { it ->
             long seconds = (currentTime.getTime() - it.updatedTime.getTime()) / 1000
             if (seconds > 10) {
+                it.description = "backend server"
                 it.connectionStatus = ConnectionStatus.CLOSED
+                it.validate()
+                println it.errors
                 it.save(flush: true, failOnError: true)
             }
         }
