@@ -1,4 +1,4 @@
-package backendappserver
+package com.nexthoughts.videoCallingBackend
 
 import enums.ConnectionStatus
 import enums.ResultStatus
@@ -8,6 +8,7 @@ import grails.rest.RestfulController
 class VideoCallController extends RestfulController {
 
     def sessionService
+    private static final String BACKEND_SERVER="backend server"
 
     static responseFormats = ['json', 'xml']
 
@@ -15,7 +16,7 @@ class VideoCallController extends RestfulController {
         String sessionId = UUID.randomUUID().toString().replaceAll("-", "")
         String status = null
         if (sessionId) {
-            status = sessionService.saveSessionInfo(sessionId, "grails server connectes to frontend", ConnectionStatus.OPEN)
+            status = sessionService.saveSessionInfo(sessionId, BACKEND_SERVER, ConnectionStatus.OPEN)
         } else {
             status = ResultStatus.FAILED
         }
@@ -39,9 +40,7 @@ class VideoCallController extends RestfulController {
     }
 
     def ping() {
-//        println("ping session id ${params}")
         String sessionId = params.sessionid
-//        println("ping ${sessionId}")
         String status = null
         if (sessionId) {
             status = sessionService.updateSessionInfo(sessionId)
@@ -57,14 +56,11 @@ class VideoCallController extends RestfulController {
         def requestJSON = request.getJSON()
         String identity = requestJSON["identity"]
         String status = requestJSON["status"]
-        println requestJSON
         String sessionId = null
-        if (status == "open") {
-            sessionId = UUID.randomUUID().toString().replaceAll("-", "")
-            sessionService.saveSessionInfo(sessionId, identity, ConnectionStatus.OPEN)
-        } else if (status == "closed") {
-            sessionId = requestJSON['sessionid']
-            sessionService.updateSessionInfo(sessionId)
+        if (status == ConnectionStatus.OPEN.status.toLowerCase()) {
+            sessionService.saveSessionInfo(AppUtil.generateRandomId(), identity, ConnectionStatus.OPEN)
+        } else if (status == ConnectionStatus.CLOSED.status.toLowerCase()) {
+            sessionService.updateSessionInfo(requestJSON['sessionid'] as String)
         }
         def result = []
         result.add("sessionId": sessionId)

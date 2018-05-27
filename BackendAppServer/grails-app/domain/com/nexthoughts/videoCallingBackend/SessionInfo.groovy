@@ -1,4 +1,4 @@
-package backendappserver
+package com.nexthoughts.videoCallingBackend
 
 import enums.ConnectionStatus
 

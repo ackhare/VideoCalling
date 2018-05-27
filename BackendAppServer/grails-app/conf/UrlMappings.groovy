@@ -1,4 +1,4 @@
-import backendappserver.VideoCallController
+import com.nexthoughts.videoCallingBackend.VideoCallController
 
 class UrlMappings {
 

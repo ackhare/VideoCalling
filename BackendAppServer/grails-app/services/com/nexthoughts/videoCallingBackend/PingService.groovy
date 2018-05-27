@@ -1,5 +1,6 @@
-package backendappserver
+package com.nexthoughts.videoCallingBackend
 
+import com.nexthoughts.videoCallingBackend.SessionInfo
 import enums.ConnectionStatus
 import grails.transaction.Transactional
 
@@ -11,7 +12,6 @@ class PingService {
         List<SessionInfo> sessionInfoList = SessionInfo.findAllByConnectionStatusNotEqual(ConnectionStatus.CLOSED)
         sessionInfoList.each { it ->
             long seconds = (currentTime.getTime() - it.updatedTime.getTime()) / 1000
-//            println("time difference for session ${it.sessionId} is ${seconds}")
             if (seconds > 10) {
                 it.connectionStatus = ConnectionStatus.CLOSED
                 it.save(flush: true, failOnError: true)

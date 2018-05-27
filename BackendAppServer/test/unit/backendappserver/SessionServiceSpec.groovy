@@ -1,5 +1,6 @@
 package backendappserver
 
+import com.nexthoughts.videoCallingBackend.SessionService
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 

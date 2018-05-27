@@ -1,5 +1,6 @@
-package backendappserver
+package com.nexthoughts.videoCallingBackend
 
+import com.nexthoughts.videoCallingBackend.SessionInfo
 import enums.ConnectionStatus
 import enums.ResultStatus
 import grails.transaction.Transactional
@@ -11,8 +12,6 @@ class SessionService {
         Date startTime = new Date()
         SessionInfo session = new SessionInfo(sessionId: sessionId, connectionStatus: connectionStatus)
         session.description = description
-        session.validate()
-        println session.errors
         if (session.save(flush: true, failOnError: true)) {
             return ResultStatus.OK
         } else {
