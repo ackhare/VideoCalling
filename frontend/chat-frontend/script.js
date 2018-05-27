@@ -36,7 +36,7 @@ app.controller('restController', function ($scope, $http, $timeout) {
         $http.post(URL_FOR_SENDING_MOCK_SESSIONID, data).success(function (response) {
         }).error(function (data, status, header, config) {
 
-            });
+        });
 
     }
     $scope.intervalFunction = function (sessionID) {

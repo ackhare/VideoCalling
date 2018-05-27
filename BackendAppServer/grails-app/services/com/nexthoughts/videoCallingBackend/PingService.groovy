@@ -15,8 +15,6 @@ class PingService {
             if (seconds > 10) {
                 it.description = AppUtil.BACKEND_SERVER
                 it.connectionStatus = ConnectionStatus.CLOSED
-                it.validate()
-                println it.errors
                 it.save(flush: true, failOnError: true)
             }
         }

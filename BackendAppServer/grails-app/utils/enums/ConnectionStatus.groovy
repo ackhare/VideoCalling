@@ -2,8 +2,8 @@ package enums
 
 public enum ConnectionStatus {
     OPEN('OPEN'),
-    CLOSED ('CLOSED'),
-    ACTIVE ('ACTIVE')
+    CLOSED('CLOSED'),
+    ACTIVE('ACTIVE')
 
     private String status;
 

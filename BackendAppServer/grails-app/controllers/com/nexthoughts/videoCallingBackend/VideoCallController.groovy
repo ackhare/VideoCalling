@@ -31,7 +31,7 @@ class VideoCallController extends RestfulController {
         String sessionId = requestJSON["sessionid"]
         String status = null
         if (sessionId) {
-            status = sessionService.updateSessionInfo(sessionId,AppUtil.BACKEND_SERVER,null)
+            status = sessionService.updateSessionInfo(sessionId, AppUtil.BACKEND_SERVER, null)
         } else {
             status = ResultStatus.FAILED
         }
@@ -42,17 +42,22 @@ class VideoCallController extends RestfulController {
 
     def pingForExternalServer() {
         def requestJSON = request.getJSON()
+        String status = null
         String identity = requestJSON["identity"]
-        String status = requestJSON["status"]
-        String sessionId =requestJSON['sessionid']
-        //println requestJSON
-        if (status == ConnectionStatus.OPEN.status.toLowerCase()) {
-            sessionService.updateSessionInfo(sessionId, identity, ConnectionStatus.OPEN)
-        } else if (status == ConnectionStatus.CLOSED.status.toLowerCase()) {
-            sessionService.updateSessionInfo(sessionId, identity, ConnectionStatus.CLOSED)
+        String statusOfCall = requestJSON["status"]
+        String sessionId = requestJSON['sessionid']
+        if (sessionId) {
+            if (statusOfCall == ConnectionStatus.OPEN.status.toLowerCase()) {
+                status = sessionService.updateSessionInfo(sessionId, identity, ConnectionStatus.OPEN)
+            } else if (statusOfCall == ConnectionStatus.CLOSED.status.toLowerCase()) {
+                status = sessionService.updateSessionInfo(sessionId, identity, ConnectionStatus.CLOSED)
+            }
+
+        } else {
+            status = ResultStatus.FAILED
         }
         def result = []
-        result.add("sessionId": sessionId)
+        result.add("status": status)
         render result as JSON
     }
 }
