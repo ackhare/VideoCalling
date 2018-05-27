@@ -19,12 +19,13 @@
     <script src="../bower_components/angular-material/angular-material.js"></script>
     <script src="script.js"></script>
     <script src="jquery.js"></script>
+    <script src="chat-frontend.js"></script>
 
 </head>
 
 <body ng-app="demoApp" >
 
-<div class="dialogdemoBasicUsage" ng-controller="getSessionId">
+<div  id="mycontroller" class="dialogdemoBasicUsage" ng-controller="getSessionId">
     <md-toolbar md-theme="indigo">
         <div class="md-toolbar-tools">
             <span class="md-flex">Toolbar: VideoCalling</span>
@@ -61,48 +62,7 @@
 
 
 </div>
-<script>
 
-    // replace these values with those generated in your TokBox Account
-    var apiKey = "46121732";
-    var sessionId = "1_MX40NjEyMTczMn5-MTUyNjY0MjY3NTA4Nn5oYmN2U21ucnE0T3R4bHM1dHBacUg2bHl-UH4";
-    var token = "T1==cGFydG5lcl9pZD00NjEyMTczMiZzaWc9ZjU3ZWNjMzJlZTBmYWE3YzY4ZTJkMjM2YzA2YTM1ZTk0ODc4NGQxMzpzZXNzaW9uX2lkPTFfTVg0ME5qRXlNVGN6TW41LU1UVXlOalkwTWpZM05UQTRObjVvWW1OMlUyMXVjbkUwVDNSNGJITTFkSEJhY1VnMmJIbC1VSDQmY3JlYXRlX3RpbWU9MTUyNjY0Mjc2MCZub25jZT0wLjc5NDE0MTA1MjQxNjAxNTUmcm9sZT1wdWJsaXNoZXImZXhwaXJlX3RpbWU9MTUyNjY2NDM2MCZjb25uZWN0aW9uX2RhdGE9aGkmaW5pdGlhbF9sYXlvdXRfY2xhc3NfbGlzdD0=";
-
-    var serverSessionId;
-
-    function getSessionId() {
-
-//        $.ajax({
-//
-//            success: function (res) {
-//
-//            },
-//            error: function () {
-//            }
-//        });
-    }
-
-
-    $(document).ready(function () {
-       // getSessionId();
-//       var app = angular.module('demoApp', ['ngMaterial'])
-//        var url = 'http://localhost:8080/BackendAppServer/api/connection/connect';
-//        app.controller('myCtrl', function ($scope, $http) {
-//            $http({
-//                url: url,
-//                dataType: "JSON",
-//                method: "GET",
-//            }).then(function mySuccess(response) {
-//                serverSessionId = res[0].sessionid;
-//                console.log(serverSessionId);
-//                setInterval("sendSessionId(serverSessionId)", 5000)
-//            }, function myError(response) {
-//                // $scope.myWelcome = response.statusText;
-//            });
-//        });
-    });
-</script>
-<script src="chat-frontend.js"></script>
 </body>
 
 </html>

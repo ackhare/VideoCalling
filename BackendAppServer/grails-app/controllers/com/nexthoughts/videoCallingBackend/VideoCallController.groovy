@@ -59,9 +59,11 @@ class VideoCallController extends RestfulController {
         String status = requestJSON["status"]
         String sessionId = null
         if (status == ConnectionStatus.OPEN.status.toLowerCase()) {
-            sessionService.saveSessionInfo(AppUtil.generateRandomId(), identity, ConnectionStatus.OPEN)
+            sessionId=AppUtil.generateRandomId()
+            sessionService.saveSessionInfo(sessionId, identity, ConnectionStatus.OPEN)
         } else if (status == ConnectionStatus.CLOSED.status.toLowerCase()) {
-            sessionService.updateSessionInfo(requestJSON['sessionid'] as String)
+            sessionId=requestJSON['sessionid']
+            sessionService.updateSessionInfo(sessionId)
         }
         def result = []
         result.add("sessionId": sessionId)

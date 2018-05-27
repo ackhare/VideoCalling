@@ -1,9 +1,5 @@
 $(function () {
-
     "use strict";
-    var mockerSessionId;
-
-
     // if user is running mozilla then use it's built-in WebSocket
     window.WebSocket = window.WebSocket || window.MozWebSocket;
 
@@ -30,7 +26,9 @@ $(function () {
         console.log("onOpen");
 
         $("#contentMain").append("<p>A mocker server has accepted your connection</p>");
-        sendToMainServer("open");
+        //sendToMainServer("open");
+        angular.element(document.getElementById("mycontroller")).scope().sendToMainServer("open");
+
     };
 
 
@@ -45,11 +43,9 @@ $(function () {
     connection.onclose = function (evt) {
         $("#contentMain").append("<p>A mocker server has closed your connection</p>");
         var url = evt.currentTarget.url
-        console.log(url)
-        console.log(mockerSessionId);
         if (url.includes(1337)) {
-        console.log("closed");
-        sendToMainServer("closed")
+            console.log("closed");
+                angular.element(document.getElementById("mycontroller")).scope().sendToMainServer("closed")
         }
 
         console.log("onclose.");
@@ -66,40 +62,9 @@ $(function () {
             leng = event.data.size
         }
         console.log("onmessage. size: " + leng + ", content: " + event.data);
-        $("#contentMain").append("<p>A mocker server has accepted your message : "+message+"</p>");
+        console.log(message);
+        $("#contentMain").append("<p>A mocker server has accepted your message</p>");
     };
-    function sendToMainServer(status) {
-        var url = 'http://localhost:8080/BackendAppServer/api/connection/pingForExternalServer';
-        var mockerDataToBeSent = {sessionid: mockerSessionId, identity: "mocker", status: status}
-        console.log(mockerSessionId+"mmmmmmmmmmmmmmmmmmmmmmmmmmm");
-        // $.ajax({
-        //     url: url,
-        //     dataType: "JSON",
-        //     method: "POST",
-        //     contentType: 'application/json; charset=utf-8',
-        //     data: JSON.stringify(mockerDataToBeSent),
-        //     async: false,
-        //     success: function (res) {
-        //         mockerSessionId = res[0].sessionId
-        //     },
-        //     error: function () {
-        //
-        //     }
-        // });
-        // app.controller('myCtrl', function($scope, $http) {
-        //     $http({
-        //     url: url,
-        //     dataType: "JSON",
-        //     method: "POST",
-        //     contentType: 'application/json; charset=utf-8',
-        //     data: JSON.stringify(mockerDataToBeSent),
-        //     async: false,
-        //     }).then(function mySuccess(response) {
-        //        mockerSessionId = res[0].sessionId
-        //     }, function myError(response) {
-        //         console.error("There was an error communicating with grails server");
-        //     });
-        // });
-    }
+
 
 });
