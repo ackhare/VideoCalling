@@ -40,7 +40,8 @@ class VideoCallController extends RestfulController {
     }
 
     def ping() {
-        String sessionId = params.sessionid
+        def requestJSON = request.getJSON()
+        String sessionId = requestJSON["sessionid"]
         String status = null
         if (sessionId) {
             status = sessionService.updateSessionInfo(sessionId)

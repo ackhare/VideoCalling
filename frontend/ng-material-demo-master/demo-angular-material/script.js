@@ -15,18 +15,15 @@ app.controller('getSessionId', function ($scope, $http, $timeout) {
     });
     function sendSessionId(sessionID) {
         var url = 'http://localhost:8080/BackendAppServer/api/connection/ping';
-        $.ajax({
-            url: url,
-            dataType: "JSON",
-            method: "POST",
-            data: {sessionid: sessionID},
-            success: function (res) {
+        var data=({sessionid: sessionID});
+        $http.post(url,data).
+            success(function (res) {
                 console.log(res)
-            },
-            error: function () {
+            }).
+            error(function () {
 
-            }
-        });
+            })
+
 
 
     }
