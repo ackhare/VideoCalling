@@ -19,33 +19,24 @@ class SessionService {
         }
     }
 
-    public String closeSession(String sessionId) {
-        SessionInfo session = SessionInfo.findBySessionId(sessionId)
-        String result = null
-        String currentSession = session.getConnectionStatus()
-        if (currentSession != ConnectionStatus.CLOSED.toString()) {
-            session.endTime = new Date()
-            session.connectionStatus = ConnectionStatus.CLOSED
-            if (session.save()) {
-                result = ResultStatus.OK
-            } else {
-                result = ResultStatus.FAILED
-            }
-        } else {
-            result = ResultStatus.FAILED
-        }
-    }
-
     public String updateSessionInfo(String sessionId, String identity, ConnectionStatus connectionStatus) {
         SessionInfo session = SessionInfo.findBySessionId(sessionId)
         String result = null
         if (session) {
             session.description = identity
             session.connectionStatus = connectionStatus
-
             String currentSession = session.getConnectionStatus()
             if ((currentSession == ConnectionStatus.OPEN.toString()) || (currentSession == ConnectionStatus.ACTIVE.toString())) {
                 session.connectionStatus = ConnectionStatus.ACTIVE
+                session.updatedTime = new Date()
+                if (session.save(flush: true, failOnError: true)) {
+                    result = ResultStatus.OK
+                } else {
+                    result = ResultStatus.FAILED
+                }
+
+            } else if (session.connectionStatus == ConnectionStatus.CLOSED) {
+                session.endTime = new Date()
                 session.updatedTime = new Date()
                 if (session.save(flush: true, failOnError: true)) {
                     result = ResultStatus.OK

@@ -1,39 +1,28 @@
-var app = angular.module('demoApp', ['ngMaterial']);
-var url = 'http://localhost:8080/BackendAppServer/api/connection/connect';
+var app = angular.module('videoCallingApp', ['ngMaterial']);
 var serverSessionId;
-app.controller('abcd', function ($scope, $http, $timeout) {
-
+app.controller('restController', function ($scope, $http, $timeout) {
     $scope.getSessionId = function (status) {
-        var url = 'http://localhost:8080/BackendAppServer/api/connection/connect';
-
-        console.log("status" + status)
-        if (serverSessionId===undefined && status=="open") {
+        if (serverSessionId === undefined && status === OPEN_STATUS) {
             $http({
-                url: url,
+                url: URL_FOR_GETTING_SESSIONID,
                 dataType: "JSON",
                 method: "GET",
             }).then(function mySuccess(response) {
-                console.log("session from main server");
-                var mockerSessionId = response.data[0].sessionid;
-                console.log(mockerSessionId);
-                serverSessionId = mockerSessionId;
-                $scope.sendToMainServer(status, mockerSessionId);
-                $scope.intervalFunction(mockerSessionId);
+                serverSessionId = response.data[0].sessionid;
+                $scope.sendToMainServer(status, serverSessionId);
+                $scope.intervalFunction(serverSessionId);
             }, function myError(response) {
-                // $scope.myWelcome = response.statusText;
             });
         }
-        else if (status == "closed") {
-            console.log(serverSessionId)
+        else if (status === CLOSED_STATUS) {
             $scope.sendToMainServer(status, serverSessionId);
         }
 
     }
 
     function sendSessionId(sessionID) {
-        var url = 'http://localhost:8080/BackendAppServer/api/connection/ping';
         var data = ({sessionid: sessionID});
-        $http.post(url, data).success(function (res) {
+        $http.post(URL_FOR_PINGING_MAIN_SERVER, data).success(function (res) {
             console.log(res)
         }).error(function () {
 
@@ -41,19 +30,11 @@ app.controller('abcd', function ($scope, $http, $timeout) {
     }
 
     $scope.sendToMainServer = function (status, mockerSessionId) {
-        var url = 'http://localhost:8080/BackendAppServer/api/connection/pingForExternalServer';
         var data = ({
-            sessionid: mockerSessionId, identity: "mocker", status: status
+            sessionid: mockerSessionId, identity: MOCK_SERVER, status: status
         });
-        $http.post(url, data).success(function (response) {
-            console.log(response);
-
-            //  mockerSessionId = response[0].sessionid
-            console.log("In sendToMainServer");
-            console.log(mockerSessionId)
-
-        })
-            .error(function (data, status, header, config) {
+        $http.post(URL_FOR_SENDING_MOCK_SESSIONID, data).success(function (response) {
+        }).error(function (data, status, header, config) {
 
             });
 
