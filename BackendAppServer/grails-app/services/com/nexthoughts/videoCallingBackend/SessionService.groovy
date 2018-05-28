@@ -24,6 +24,7 @@ class SessionService {
         String result = null
         if (session) {
             session.description = identity
+            if(connectionStatus)
             session.connectionStatus = connectionStatus
             String currentSession = session.getConnectionStatus()
             if ((currentSession == ConnectionStatus.OPEN.toString()) || (currentSession == ConnectionStatus.ACTIVE.toString())) {
