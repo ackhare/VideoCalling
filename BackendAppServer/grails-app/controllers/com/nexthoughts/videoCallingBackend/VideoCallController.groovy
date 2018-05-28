@@ -16,7 +16,7 @@ class VideoCallController extends RestfulController {
         String sessionId = AppUtil.generateRandomId()
         String status = null
         if (sessionId) {
-            status = sessionService.saveSessionInfo(sessionId, AppUtil.BACKEND_SERVER, ConnectionStatus.OPEN)
+            status = sessionService.saveSessionInfo(sessionId, ConnectionStatus.OPEN)
         } else {
             status = ResultStatus.FAILED
         }

@@ -9,7 +9,6 @@ class SessionInfo {
     Date endTime
     Date updatedTime = new Date()
     ConnectionStatus connectionStatus
-    String description
 
 
     static constraints = {

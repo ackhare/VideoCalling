@@ -8,10 +8,9 @@ import grails.transaction.Transactional
 @Transactional
 class SessionService {
 
-    public String saveSessionInfo(String sessionId, String description, ConnectionStatus connectionStatus) {
+    public String saveSessionInfo(String sessionId, ConnectionStatus connectionStatus) {
         Date startTime = new Date()
         SessionInfo session = new SessionInfo(sessionId: sessionId, connectionStatus: connectionStatus)
-        session.description = description
         if (session.save(flush: true, failOnError: true)) {
             return ResultStatus.OK
         } else {
@@ -23,7 +22,6 @@ class SessionService {
         SessionInfo session = SessionInfo.findBySessionId(sessionId)
         String result = null
         if (session) {
-            session.description = identity
             if (connectionStatus)
                 session.connectionStatus = connectionStatus
             String currentSession = session.getConnectionStatus()

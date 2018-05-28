@@ -14,7 +14,6 @@ class PingService {
             SessionInfo sessionInfo = sessionInfoList?.last()?.refresh()
             long seconds = (currentTime.getTime() - sessionInfo.updatedTime.getTime()) / 1000
             if (seconds > 10) {
-                sessionInfo.description = AppUtil.BACKEND_SERVER
                 if (sessionInfo.connectionStatus != ConnectionStatus.CLOSED) {
                     sessionInfo.endTime = new Date();
                     sessionInfo.connectionStatus = ConnectionStatus.CLOSED
