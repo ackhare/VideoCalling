@@ -6,6 +6,7 @@ enum ResultStatus {
     FAILED("FAILED")
 
     private String response
+
     ResultStatus(String response) {
         this.response = response
     }

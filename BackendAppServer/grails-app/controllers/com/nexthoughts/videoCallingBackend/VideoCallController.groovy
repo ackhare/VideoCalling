@@ -8,15 +8,15 @@ import grails.rest.RestfulController
 class VideoCallController extends RestfulController {
 
     def sessionService
-    private static final String BACKEND_SERVER="backend server"
+
 
     static responseFormats = ['json', 'xml']
 
     def connect() {
-        String sessionId = UUID.randomUUID().toString().replaceAll("-", "")
+        String sessionId = AppUtil.generateRandomId()
         String status = null
         if (sessionId) {
-            status = sessionService.saveSessionInfo(sessionId, BACKEND_SERVER, ConnectionStatus.OPEN)
+            status = sessionService.saveSessionInfo(sessionId, ConnectionStatus.OPEN)
         } else {
             status = ResultStatus.FAILED
         }
@@ -25,25 +25,13 @@ class VideoCallController extends RestfulController {
         render result as JSON
     }
 
-    def closed() {
-        def requestJSON = request.getJSON()
-        String sessionId = requestJSON['sessionid']
-        String status = null
-        if (sessionId) {
-            status = sessionService.closeSession(sessionId)
-        } else {
-            status = ResultStatus.FAILED
-        }
-        def result = []
-        result.add("status": status)
-        render result as JSON
-    }
 
     def ping() {
-        String sessionId = params.sessionid
+        def requestJSON = request.getJSON()
+        String sessionId = requestJSON["sessionid"]
         String status = null
         if (sessionId) {
-            status = sessionService.updateSessionInfo(sessionId)
+            status = sessionService.updateSessionInfo(sessionId, AppUtil.BACKEND_SERVER, null)
         } else {
             status = ResultStatus.FAILED
         }
@@ -54,16 +42,22 @@ class VideoCallController extends RestfulController {
 
     def pingForExternalServer() {
         def requestJSON = request.getJSON()
+        String status = null
         String identity = requestJSON["identity"]
-        String status = requestJSON["status"]
-        String sessionId = null
-        if (status == ConnectionStatus.OPEN.status.toLowerCase()) {
-            sessionService.saveSessionInfo(AppUtil.generateRandomId(), identity, ConnectionStatus.OPEN)
-        } else if (status == ConnectionStatus.CLOSED.status.toLowerCase()) {
-            sessionService.updateSessionInfo(requestJSON['sessionid'] as String)
+        String statusOfCall = requestJSON["status"]
+        String sessionId = requestJSON['sessionid']
+        if (sessionId) {
+            if (statusOfCall == ConnectionStatus.OPEN.status.toLowerCase()) {
+                status = sessionService.updateSessionInfo(sessionId, identity, ConnectionStatus.OPEN)
+            } else if (statusOfCall == ConnectionStatus.CLOSED.status.toLowerCase()) {
+                status = sessionService.updateSessionInfo(sessionId, identity, ConnectionStatus.CLOSED)
+            }
+
+        } else {
+            status = ResultStatus.FAILED
         }
         def result = []
-        result.add("sessionId": sessionId)
+        result.add("status": status)
         render result as JSON
     }
 }
