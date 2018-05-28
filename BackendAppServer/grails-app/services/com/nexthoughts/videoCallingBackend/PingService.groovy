@@ -10,13 +10,18 @@ class PingService {
     def serviceMethod() {
         Date currentTime = new Date()
         List<SessionInfo> sessionInfoList = SessionInfo.findAllByConnectionStatusNotEqual(ConnectionStatus.CLOSED)
-        sessionInfoList.each { it ->
-            long seconds = (currentTime.getTime() - it.updatedTime.getTime()) / 1000
+        if (!sessionInfoList.empty) {
+            SessionInfo sessionInfo = sessionInfoList?.last()?.refresh()
+            long seconds = (currentTime.getTime() - sessionInfo.updatedTime.getTime()) / 1000
             if (seconds > 10) {
-                it.description = AppUtil.BACKEND_SERVER
-                it.connectionStatus = ConnectionStatus.CLOSED
-                it.save(flush: true, failOnError: true)
+                sessionInfo.description = AppUtil.BACKEND_SERVER
+                if (sessionInfo.connectionStatus != ConnectionStatus.CLOSED) {
+                    sessionInfo.endTime = new Date();
+                    sessionInfo.connectionStatus = ConnectionStatus.CLOSED
+                    sessionInfo.save(flush: true, failOnError: true)
+                }
             }
         }
     }
 }
+

@@ -34,6 +34,7 @@ app.controller('restController', function ($scope, $http, $timeout) {
             sessionid: mockerSessionId, identity: MOCK_SERVER, status: status
         });
         $http.post(URL_FOR_SENDING_MOCK_SESSIONID, data).success(function (response) {
+            console.log("mock server running")
         }).error(function (data, status, header, config) {
 
         });

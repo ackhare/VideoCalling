@@ -24,8 +24,8 @@ class SessionService {
         String result = null
         if (session) {
             session.description = identity
-            if(connectionStatus)
-            session.connectionStatus = connectionStatus
+            if (connectionStatus)
+                session.connectionStatus = connectionStatus
             String currentSession = session.getConnectionStatus()
             if ((currentSession == ConnectionStatus.OPEN.toString()) || (currentSession == ConnectionStatus.ACTIVE.toString())) {
                 session.connectionStatus = ConnectionStatus.ACTIVE
@@ -36,7 +36,7 @@ class SessionService {
                     result = ResultStatus.FAILED
                 }
 
-            } else if (session.connectionStatus == ConnectionStatus.CLOSED) {
+            } else if (session.connectionStatus == ConnectionStatus.CLOSED && identity == AppUtil.MOCK_SERVER) {
                 session.endTime = new Date()
                 session.updatedTime = new Date()
                 if (session.save(flush: true, failOnError: true)) {
